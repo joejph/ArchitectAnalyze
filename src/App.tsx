@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import Header from './components/Header';
+import ArchitectureDiagram from './components/ArchitectureDiagram';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'single' | 'cluster'>('cluster');
+  const [activeTab, setActiveTab] = useState<'single' | 'cluster' | 'database'>('cluster');
   const [copied, setCopied] = useState('');
 
   const handleCopy = (text: string, id: string) => {
@@ -39,22 +40,36 @@ export default function App() {
             >
               <i className="fas fa-project-diagram mr-2"></i>集群（多台服务器）
             </button>
+            <button
+              onClick={() => setActiveTab('database')}
+              className={`px-6 py-3 rounded-xl font-semibold transition-all ${
+                activeTab === 'database'
+                  ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/30'
+                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+              }`}
+            >
+              <i className="fas fa-database mr-2"></i>数据库架构图
+            </button>
           </div>
         </section>
 
-        {activeTab === 'cluster' ? <ClusterMode copied={copied} onCopy={handleCopy} /> : <SingleMode copied={copied} onCopy={handleCopy} />}
+        {activeTab === 'cluster' && <ClusterMode copied={copied} onCopy={handleCopy} />}
+        {activeTab === 'single' && <SingleMode copied={copied} onCopy={handleCopy} />}
+        {activeTab === 'database' && <DatabaseMode />}
 
-        {/* Architecture Diagram */}
-        <section className="mt-16">
-          <h2 className="text-2xl font-bold text-center mb-8">
-            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              集群架构示例
-            </span>
-          </h2>
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
-            <ClusterDiagram />
-          </div>
-        </section>
+        {/* Cluster Architecture Diagram - only show in cluster mode */}
+        {activeTab === 'cluster' && (
+          <section className="mt-16">
+            <h2 className="text-2xl font-bold text-center mb-8">
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                集群架构示例
+              </span>
+            </h2>
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
+              <ClusterDiagram />
+            </div>
+          </section>
+        )}
       </main>
 
       <footer className="border-t border-gray-800 py-8 mt-16">
@@ -528,5 +543,263 @@ function ClusterDiagram() {
         每台服务器运行 node_collect.sh 采集信息，管理节点汇总生成完整架构报告
       </div>
     </div>
+  );
+}
+
+function DatabaseMode() {
+  return (
+    <>
+      {/* Introduction */}
+      <section className="mb-12">
+        <div className="bg-gradient-to-r from-cyan-900/20 to-blue-900/20 border border-cyan-800/50 rounded-xl p-6">
+          <h3 className="text-xl font-bold text-cyan-400 mb-3">
+            <i className="fas fa-database mr-2"></i>数据库驱动的架构分析
+          </h3>
+          <p className="text-gray-400 mb-4">
+            将采集到的数据存入SQLite数据库，通过数据分析自动生成系统架构图。支持查询、统计和可视化展示。
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <div className="bg-gray-900/50 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">📥</div>
+              <div className="text-gray-300 text-sm font-medium">数据采集</div>
+              <div className="text-gray-500 text-xs">采集脚本收集信息</div>
+            </div>
+            <div className="bg-gray-900/50 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">💾</div>
+              <div className="text-gray-300 text-sm font-medium">数据存储</div>
+              <div className="text-gray-500 text-xs">写入SQLite数据库</div>
+            </div>
+            <div className="bg-gray-900/50 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">📊</div>
+              <div className="text-gray-300 text-sm font-medium">架构可视化</div>
+              <div className="text-gray-500 text-xs">自动生成架构图</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Download Scripts */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-center mb-8">
+          <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+            下载数据库相关脚本
+          </span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-cyan-900/50 rounded-lg flex items-center justify-center">
+                <i className="fas fa-database text-cyan-400"></i>
+              </div>
+              <h3 className="font-semibold text-gray-200">数据库Schema</h3>
+            </div>
+            <p className="text-gray-400 text-sm mb-4">SQLite数据库表结构定义</p>
+            <a
+              href="./schema.sql"
+              download
+              className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg transition-colors text-sm"
+            >
+              <i className="fas fa-download"></i>
+              <span>下载 schema.sql</span>
+            </a>
+          </div>
+
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-emerald-900/50 rounded-lg flex items-center justify-center">
+                <i className="fas fa-file-import text-emerald-400"></i>
+              </div>
+              <h3 className="font-semibold text-gray-200">数据写入脚本</h3>
+            </div>
+            <p className="text-gray-400 text-sm mb-4">将采集数据写入数据库</p>
+            <a
+              href="./db_writer.sh"
+              download
+              className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors text-sm"
+            >
+              <i className="fas fa-download"></i>
+              <span>下载 db_writer.sh</span>
+            </a>
+          </div>
+
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-purple-900/50 rounded-lg flex items-center justify-center">
+                <i className="fas fa-file-archive text-purple-400"></i>
+              </div>
+              <h3 className="font-semibold text-gray-200">批量导入脚本</h3>
+            </div>
+            <p className="text-gray-400 text-sm mb-4">批量导入所有节点数据</p>
+            <a
+              href="./import_all.sh"
+              download
+              className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors text-sm"
+            >
+              <i className="fas fa-download"></i>
+              <span>下载 import_all.sh</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Workflow */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-center mb-8">
+          <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+            使用流程
+          </span>
+        </h2>
+        <div className="space-y-4">
+          <StepCard
+            step={1}
+            title="准备环境"
+            color="cyan"
+            commands={[
+              { label: '安装SQLite', cmd: 'sudo apt-get install sqlite3  # Ubuntu/Debian' },
+              { label: '', cmd: 'sudo yum install sqlite  # CentOS/RHEL' },
+              { label: '安装Node.js（用于API服务）', cmd: 'curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -' },
+              { label: '', cmd: 'sudo apt-get install -y nodejs' },
+            ]}
+          />
+          <StepCard
+            step={2}
+            title="采集节点数据"
+            color="emerald"
+            commands={[
+              { label: '在各节点运行采集脚本', cmd: 'sudo ./node_collect.sh' },
+              { label: '将数据传回管理节点', cmd: 'scp -r node_* admin@管理节点:~/node_data/' },
+            ]}
+          />
+          <StepCard
+            step={3}
+            title="导入数据库"
+            color="purple"
+            commands={[
+              { label: '初始化数据库', cmd: 'sqlite3 cluster_architecture.db < schema.sql' },
+              { label: '批量导入数据', cmd: 'chmod +x import_all.sh db_writer.sh' },
+              { label: '', cmd: './import_all.sh ./node_data cluster_architecture.db' },
+            ]}
+          />
+          <StepCard
+            step={4}
+            title="启动API服务"
+            color="orange"
+            commands={[
+              { label: '安装依赖', cmd: 'npm install express sqlite3 cors' },
+              { label: '启动API服务', cmd: 'node api-server.js' },
+              { label: '访问架构图', cmd: '打开浏览器访问 http://localhost:3001' },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* Architecture Diagram Preview */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-center mb-8">
+          <span className="bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
+            架构图预览
+          </span>
+        </h2>
+        <ArchitectureDiagram />
+      </section>
+
+      {/* Database Schema */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-center mb-8">
+          <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            数据库结构
+          </span>
+        </h2>
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-emerald-400 font-semibold mb-3">
+                <i className="fas fa-table mr-2"></i>核心表
+              </h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li className="flex items-start gap-2">
+                  <i className="fas fa-check text-emerald-400 mt-1"></i>
+                  <div>
+                    <code className="text-cyan-300">nodes</code>
+                    <p className="text-gray-500 text-xs">节点基本信息（主机名、IP、系统信息）</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <i className="fas fa-check text-emerald-400 mt-1"></i>
+                  <div>
+                    <code className="text-cyan-300">services</code>
+                    <p className="text-gray-500 text-xs">运行的服务列表</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <i className="fas fa-check text-emerald-400 mt-1"></i>
+                  <div>
+                    <code className="text-cyan-300">ports</code>
+                    <p className="text-gray-500 text-xs">监听端口和进程信息</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <i className="fas fa-check text-emerald-400 mt-1"></i>
+                  <div>
+                    <code className="text-cyan-300">processes</code>
+                    <p className="text-gray-500 text-xs">进程详情和资源占用</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <i className="fas fa-check text-emerald-400 mt-1"></i>
+                  <div>
+                    <code className="text-cyan-300">containers</code>
+                    <p className="text-gray-500 text-xs">Docker/K8s容器信息</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-cyan-400 font-semibold mb-3">
+                <i className="fas fa-link mr-2"></i>关系表
+              </h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li className="flex items-start gap-2">
+                  <i className="fas fa-check text-cyan-400 mt-1"></i>
+                  <div>
+                    <code className="text-cyan-300">connections</code>
+                    <p className="text-gray-500 text-xs">节点间的网络连接</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <i className="fas fa-check text-cyan-400 mt-1"></i>
+                  <div>
+                    <code className="text-cyan-300">architecture_relations</code>
+                    <p className="text-gray-500 text-xs">架构关系（推断的服务依赖）</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <i className="fas fa-check text-cyan-400 mt-1"></i>
+                  <div>
+                    <code className="text-cyan-300">configurations</code>
+                    <p className="text-gray-500 text-xs">配置信息</p>
+                  </div>
+                </li>
+              </ul>
+
+              <h3 className="text-purple-400 font-semibold mb-3 mt-6">
+                <i className="fas fa-query text-purple-400 mr-2"></i>常用查询
+              </h3>
+              <div className="space-y-2">
+                <div className="bg-gray-950 rounded-lg p-3">
+                  <code className="text-cyan-300 text-xs">SELECT * FROM nodes;</code>
+                </div>
+                <div className="bg-gray-950 rounded-lg p-3">
+                  <code className="text-cyan-300 text-xs">SELECT * FROM ports WHERE state='LISTEN';</code>
+                </div>
+                <div className="bg-gray-950 rounded-lg p-3">
+                  <code className="text-cyan-300 text-xs">SELECT * FROM architecture_relations;</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
