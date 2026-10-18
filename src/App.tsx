@@ -311,6 +311,80 @@ export default function App() {
             </div>
           </div>
 
+          {/* Runtime Requirements */}
+          <div className="mt-8 bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-gray-200 mb-4">
+              <i className="fas fa-server text-blue-400 mr-2"></i>
+              运行环境要求
+            </h3>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-950/50 rounded-lg p-4">
+                  <p className="text-emerald-400 font-medium mb-2">
+                    <i className="fas fa-check-circle mr-2"></i>必需环境
+                  </p>
+                  <ul className="text-gray-400 text-sm space-y-1">
+                    <li>• <strong className="text-gray-300">操作系统：</strong>Linux（任何发行版）</li>
+                    <li>• <strong className="text-gray-300">Shell：</strong>Bash 4.0+</li>
+                    <li>• <strong className="text-gray-300">权限：</strong>建议 root 或 sudo</li>
+                    <li>• <strong className="text-gray-300">磁盘空间：</strong>至少 10MB 可用空间</li>
+                  </ul>
+                </div>
+                <div className="bg-gray-950/50 rounded-lg p-4">
+                  <p className="text-cyan-400 font-medium mb-2">
+                    <i className="fas fa-terminal mr-2"></i>必需命令
+                  </p>
+                  <ul className="text-gray-400 text-sm space-y-1">
+                    <li>• <code className="text-cyan-300">bash</code> - Shell解释器</li>
+                    <li>• <code className="text-cyan-300">systemctl</code> - 服务管理（systemd）</li>
+                    <li>• <code className="text-cyan-300">ss</code> 或 <code className="text-cyan-300">netstat</code> - 网络查看</li>
+                    <li>• <code className="text-cyan-300">ps</code> - 进程查看</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-gray-950/50 rounded-lg p-4">
+                <p className="text-yellow-400 font-medium mb-2">
+                  <i className="fas fa-info-circle mr-2"></i>可选命令（部分模块需要）
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-gray-400 text-sm">
+                  <div>• <code className="text-cyan-300">docker</code> - 容器分析模块</div>
+                  <div>• <code className="text-cyan-300">kubectl</code> - K8s分析</div>
+                  <div>• <code className="text-cyan-300">pstree</code> - 进程树显示</div>
+                  <div>• <code className="text-cyan-300">iostat</code> - I/O统计（需sysstat包）</div>
+                  <div>• <code className="text-cyan-300">iptables</code> / <code className="text-cyan-300">nft</code> - 防火墙</div>
+                  <div>• <code className="text-cyan-300">rpm</code> / <code className="text-cyan-300">dpkg</code> - 包管理</div>
+                </div>
+                <p className="text-gray-500 text-xs mt-2">
+                  💡 缺失的命令会被自动跳过，不影响其他模块的运行
+                </p>
+              </div>
+
+              <div className="bg-gray-950/50 rounded-lg p-4">
+                <p className="text-purple-400 font-medium mb-2">
+                  <i className="fab fa-linux mr-2"></i>支持的Linux发行版
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-xs">Ubuntu</span>
+                  <span className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-xs">Debian</span>
+                  <span className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-xs">CentOS</span>
+                  <span className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-xs">RHEL</span>
+                  <span className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-xs">Fedora</span>
+                  <span className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-xs">Arch Linux</span>
+                  <span className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-xs">openSUSE</span>
+                  <span className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-xs">Alpine</span>
+                </div>
+              </div>
+
+              <div className="bg-yellow-900/20 border border-yellow-800/50 rounded-lg p-4">
+                <p className="text-yellow-400 text-sm">
+                  <i className="fas fa-exclamation-triangle mr-2"></i>
+                  <strong>注意：</strong>脚本只在Linux环境下运行。不支持Windows、macOS或BSD系统。如果是Windows服务器，请使用WSL或远程连接到Linux服务器执行。
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* FAQ */}
           <div className="mt-8 bg-gray-900 border border-gray-800 rounded-xl p-6">
             <h3 className="text-lg font-semibold text-gray-200 mb-4">
