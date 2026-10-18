@@ -2,14 +2,23 @@
 #=============================================================
 # Linux集群节点信息采集脚本
 # 在每台服务器上运行，采集本机信息
-# 用法: chmod +x node_collect.sh && sudo ./node_collect.sh
+# 用法: chmod +x node_collect.sh && sudo ./node_collect.sh [系统名称] [节点角色]
+# 示例: sudo ./node_collect.sh "订单系统" "web"
 #=============================================================
+
+# 参数处理
+SYSTEM_NAME="${1:-未分类}"
+NODE_ROLE="${2:-unknown}"
 
 HOSTNAME_VAL=$(hostname 2>/dev/null || echo "unknown")
 IP_ADDR=$(hostname -I 2>/dev/null | awk '{print $1}' || echo "unknown")
 TS=$(date +%Y%m%d_%H%M%S)
 OUT="./node_${HOSTNAME_VAL}_${TS}"
 mkdir -p "$OUT"
+
+# 保存系统信息
+echo "$SYSTEM_NAME" > "$OUT/system_name.txt"
+echo "$NODE_ROLE" > "$OUT/node_role.txt"
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'

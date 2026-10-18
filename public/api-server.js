@@ -68,6 +68,115 @@ app.get('/api/nodes/:id', (req, res) => {
   });
 });
 
+// 获取所有系统
+app.get('/api/systems', (req, res) => {
+  const db = new sqlite3.Database(DB_PATH);
+  db.all(`
+    SELECT 
+      s.*,
+      (SELECT COUNT(*) FROM nodes n WHERE n.system_id = s.id) as node_count
+    FROM systems s
+    ORDER BY s.id
+  `, [], (err, rows) => {
+    db.close();
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json(rows);
+    }
+  });
+});
+
+// 获取单个系统详情
+app.get('/api/systems/:id', (req, res) => {
+  const db = new sqlite3.Database(DB_PATH);
+  const systemId = req.params.id;
+  
+  db.get('SELECT * FROM systems WHERE id = ?', [systemId], (err, system) => {
+    if (err || !system) {
+      db.close();
+      res.status(404).json({ error: 'System not found' });
+      return;
+    }
+    
+    // 获取系统下的节点
+    db.all('SELECT * FROM nodes WHERE system_id = ?', [systemId], (err, nodes) => {
+      if (err) {
+        db.close();
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      
+      // 获取系统关系（作为源和目标）
+      db.all(`
+        SELECT sr.*, s2.system_name as target_name
+        FROM system_relations sr
+        JOIN systems s2 ON sr.target_system_id = s2.id
+        WHERE sr.source_system_id = ?
+      `, [systemId], (err, outgoing) => {
+        db.all(`
+          SELECT sr.*, s1.system_name as source_name
+          FROM system_relations sr
+          JOIN systems s1 ON sr.source_system_id = s1.id
+          WHERE sr.target_system_id = ?
+        `, [systemId], (err, incoming) => {
+          db.close();
+          res.json({
+            ...system,
+            nodes: nodes,
+            outgoing_relations: outgoing,
+            incoming_relations: incoming
+          });
+        });
+      });
+    });
+  });
+});
+
+// 获取多系统架构图数据
+app.get('/api/multi-system-architecture', (req, res) => {
+  const db = new sqlite3.Database(DB_PATH);
+  
+  // 获取所有系统
+  db.all(`
+    SELECT 
+      s.*,
+      (SELECT COUNT(*) FROM nodes n WHERE n.system_id = s.id) as node_count
+    FROM systems s
+  `, [], (err, systems) => {
+    if (err) {
+      db.close();
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    
+    // 获取系统间关系
+    db.all(`
+      SELECT 
+        sr.*,
+        s1.system_name as source_name,
+        s2.system_name as target_name
+      FROM system_relations sr
+      JOIN systems s1 ON sr.source_system_id = s1.id
+      JOIN systems s2 ON sr.target_system_id = s2.id
+    `, [], (err, relations) => {
+      // 获取每个系统的节点
+      db.all('SELECT id, system_id, hostname, ip, role FROM nodes', [], (err, nodes) => {
+        db.close();
+        if (err) {
+          res.status(500).json({ error: err.message });
+        } else {
+          res.json({
+            systems: systems,
+            relations: relations,
+            nodes: nodes
+          });
+        }
+      });
+    });
+  });
+});
+
 // 获取架构关系
 app.get('/api/architecture', (req, res) => {
   const db = new sqlite3.Database(DB_PATH);

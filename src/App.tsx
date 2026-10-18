@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import Header from './components/Header';
 import ArchitectureDiagram from './components/ArchitectureDiagram';
+import MultiSystemArchitecture from './components/MultiSystemArchitecture';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'single' | 'cluster' | 'database'>('cluster');
+  const [activeTab, setActiveTab] = useState<'single' | 'cluster' | 'database' | 'multi-system'>('cluster');
   const [copied, setCopied] = useState('');
 
   const handleCopy = (text: string, id: string) => {
@@ -50,12 +51,23 @@ export default function App() {
             >
               <i className="fas fa-database mr-2"></i>数据库架构图
             </button>
+            <button
+              onClick={() => setActiveTab('multi-system')}
+              className={`px-6 py-3 rounded-xl font-semibold transition-all ${
+                activeTab === 'multi-system'
+                  ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/30'
+                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+              }`}
+            >
+              <i className="fas fa-cubes mr-2"></i>多系统架构
+            </button>
           </div>
         </section>
 
         {activeTab === 'cluster' && <ClusterMode copied={copied} onCopy={handleCopy} />}
         {activeTab === 'single' && <SingleMode copied={copied} onCopy={handleCopy} />}
         {activeTab === 'database' && <DatabaseMode />}
+        {activeTab === 'multi-system' && <MultiSystemMode />}
 
         {/* Cluster Architecture Diagram - only show in cluster mode */}
         {activeTab === 'cluster' && (
@@ -861,6 +873,239 @@ function DatabaseMode() {
                   <code className="text-cyan-300 text-xs">SELECT * FROM architecture_relations;</code>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function MultiSystemMode() {
+  return (
+    <>
+      {/* Introduction */}
+      <section className="mb-12">
+        <div className="bg-gradient-to-r from-pink-900/20 to-purple-900/20 border border-pink-800/50 rounded-xl p-6">
+          <h3 className="text-xl font-bold text-pink-400 mb-3">
+            <i className="fas fa-cubes mr-2"></i>多系统架构分析
+          </h3>
+          <p className="text-gray-400 mb-4">
+            支持采集和管理多套独立系统的信息，自动分析系统间的依赖关系，绘制完整的多系统架构图。
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+            <div className="bg-gray-900/50 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">📦</div>
+              <div className="text-gray-300 text-sm font-medium">多系统管理</div>
+              <div className="text-gray-500 text-xs">独立管理每套系统</div>
+            </div>
+            <div className="bg-gray-900/50 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">🔗</div>
+              <div className="text-gray-300 text-sm font-medium">关系分析</div>
+              <div className="text-gray-500 text-xs">自动识别系统依赖</div>
+            </div>
+            <div className="bg-gray-900/50 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">🗺️</div>
+              <div className="text-gray-300 text-sm font-medium">架构图绘制</div>
+              <div className="text-gray-500 text-xs">可视化系统拓扑</div>
+            </div>
+            <div className="bg-gray-900/50 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">📊</div>
+              <div className="text-gray-300 text-sm font-medium">统计分析</div>
+              <div className="text-gray-500 text-xs">多维度数据统计</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Download Scripts */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-center mb-8">
+          <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+            下载多系统管理工具
+          </span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-pink-900/50 rounded-lg flex items-center justify-center">
+                <i className="fas fa-cogs text-pink-400"></i>
+              </div>
+              <h3 className="font-semibold text-gray-200">系统管理脚本</h3>
+            </div>
+            <p className="text-gray-400 text-sm mb-4">管理多系统信息、添加系统关系</p>
+            <a
+              href="./system_manager.sh"
+              download
+              className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-pink-600 hover:bg-pink-500 text-white rounded-lg transition-colors text-sm"
+            >
+              <i className="fas fa-download"></i>
+              <span>下载 system_manager.sh</span>
+            </a>
+          </div>
+
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-purple-900/50 rounded-lg flex items-center justify-center">
+                <i className="fas fa-server text-purple-400"></i>
+              </div>
+              <h3 className="font-semibold text-gray-200">节点采集脚本</h3>
+            </div>
+            <p className="text-gray-400 text-sm mb-4">支持指定系统名称和节点角色</p>
+            <a
+              href="./node_collect.sh"
+              download
+              className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors text-sm"
+            >
+              <i className="fas fa-download"></i>
+              <span>下载 node_collect.sh</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Usage Guide */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-center mb-8">
+          <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+            使用流程
+          </span>
+        </h2>
+        <div className="space-y-4">
+          <StepCard
+            step={1}
+            title="定义系统"
+            color="pink"
+            commands={[
+              { label: '添加系统', cmd: './system_manager.sh cluster.db add "订单系统" api production' },
+              { label: '', cmd: './system_manager.sh cluster.db add "用户系统" api production' },
+              { label: '', cmd: './system_manager.sh cluster.db add "支付系统" api production' },
+              { label: '', cmd: './system_manager.sh cluster.db add "数据库集群" database production' },
+              { label: '查看所有系统', cmd: './system_manager.sh cluster.db list' },
+            ]}
+          />
+          <StepCard
+            step={2}
+            title="采集节点数据（指定系统）"
+            color="purple"
+            commands={[
+              { label: '订单系统节点', cmd: 'sudo ./node_collect.sh "订单系统" "api"' },
+              { label: '用户系统节点', cmd: 'sudo ./node_collect.sh "用户系统" "api"' },
+              { label: '数据库节点', cmd: 'sudo ./node_collect.sh "数据库集群" "database"' },
+            ]}
+          />
+          <StepCard
+            step={3}
+            title="导入数据到数据库"
+            color="cyan"
+            commands={[
+              { label: '初始化数据库', cmd: 'sqlite3 cluster.db < schema.sql' },
+              { label: '批量导入', cmd: './import_all.sh ./node_data cluster.db' },
+            ]}
+          />
+          <StepCard
+            step={4}
+            title="定义系统间关系"
+            color="emerald"
+            commands={[
+              { label: '订单系统 → 数据库', cmd: './system_manager.sh cluster.db add-relation 1 4 api_call HTTP 3306 "订单数据存取"' },
+              { label: '订单系统 → 支付系统', cmd: './system_manager.sh cluster.db add-relation 1 3 api_call HTTP 8080 "支付接口调用"' },
+              { label: '用户系统 → 数据库', cmd: './system_manager.sh cluster.db add-relation 2 4 api_call HTTP 3306 "用户数据存取"' },
+              { label: '查看所有关系', cmd: './system_manager.sh cluster.db relations' },
+            ]}
+          />
+          <StepCard
+            step={5}
+            title="启动API并查看架构图"
+            color="orange"
+            commands={[
+              { label: '安装依赖', cmd: 'npm install express sqlite3 cors' },
+              { label: '启动API', cmd: 'node api-server.js' },
+              { label: '访问架构图', cmd: '浏览器打开 http://localhost:3001' },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* Architecture Diagram */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-center mb-8">
+          <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+            多系统架构图
+          </span>
+        </h2>
+        <MultiSystemArchitecture />
+      </section>
+
+      {/* Example Architecture */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-center mb-8">
+          <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            示例：电商系统架构
+          </span>
+        </h2>
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
+          <div className="flex flex-col items-center gap-6">
+            {/* 网关层 */}
+            <div className="bg-indigo-900/30 border border-indigo-700/50 rounded-xl px-8 py-4 text-center w-full max-w-md">
+              <div className="text-indigo-400 font-semibold">🚪 API网关</div>
+              <div className="text-gray-500 text-sm">统一入口 · 路由转发 · 鉴权</div>
+            </div>
+
+            <div className="text-gray-600">
+              <i className="fas fa-arrows-alt-v text-2xl"></i>
+            </div>
+
+            {/* 业务系统层 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+              <div className="bg-pink-900/30 border border-pink-700/50 rounded-xl px-4 py-4 text-center">
+                <div className="text-pink-400 font-semibold text-sm">📦 订单系统</div>
+                <div className="text-gray-500 text-xs">订单创建 · 状态管理</div>
+                <div className="text-gray-600 text-xs mt-1">3个节点</div>
+              </div>
+              <div className="bg-cyan-900/30 border border-cyan-700/50 rounded-xl px-4 py-4 text-center">
+                <div className="text-cyan-400 font-semibold text-sm">👤 用户系统</div>
+                <div className="text-gray-500 text-xs">用户管理 · 权限控制</div>
+                <div className="text-gray-600 text-xs mt-1">2个节点</div>
+              </div>
+              <div className="bg-orange-900/30 border border-orange-700/50 rounded-xl px-4 py-4 text-center">
+                <div className="text-orange-400 font-semibold text-sm">💳 支付系统</div>
+                <div className="text-gray-500 text-xs">支付处理 · 对账</div>
+                <div className="text-gray-600 text-xs mt-1">2个节点</div>
+              </div>
+            </div>
+
+            <div className="text-gray-600">
+              <i className="fas fa-arrows-alt-v text-2xl"></i>
+            </div>
+
+            {/* 基础设施层 */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
+              <div className="bg-yellow-900/30 border border-yellow-700/50 rounded-xl px-4 py-4 text-center">
+                <div className="text-yellow-400 font-semibold text-sm">🗄️ MySQL集群</div>
+                <div className="text-gray-500 text-xs">主从复制</div>
+                <div className="text-gray-600 text-xs mt-1">3个节点</div>
+              </div>
+              <div className="bg-red-900/30 border border-red-700/50 rounded-xl px-4 py-4 text-center">
+                <div className="text-red-400 font-semibold text-sm">📮 Redis集群</div>
+                <div className="text-gray-500 text-xs">缓存 · 会话</div>
+                <div className="text-gray-600 text-xs mt-1">3个节点</div>
+              </div>
+              <div className="bg-purple-900/30 border border-purple-700/50 rounded-xl px-4 py-4 text-center">
+                <div className="text-purple-400 font-semibold text-sm">📨 RabbitMQ</div>
+                <div className="text-gray-500 text-xs">消息队列</div>
+                <div className="text-gray-600 text-xs mt-1">2个节点</div>
+              </div>
+              <div className="bg-emerald-900/30 border border-emerald-700/50 rounded-xl px-4 py-4 text-center">
+                <div className="text-emerald-400 font-semibold text-sm">🔍 ES集群</div>
+                <div className="text-gray-500 text-xs">搜索 · 日志</div>
+                <div className="text-gray-600 text-xs mt-1">3个节点</div>
+              </div>
+            </div>
+
+            <div className="mt-4 text-center text-gray-500 text-sm">
+              <i className="fas fa-info-circle mr-1"></i>
+              通过 system_manager.sh 定义系统关系，自动生成架构图
             </div>
           </div>
         </div>

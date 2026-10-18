@@ -43,16 +43,32 @@ MEMORY_INFO=$(cat "$NODE_DIR/memory.txt" 2>/dev/null || echo "")
 DISK_INFO=$(cat "$NODE_DIR/disk.txt" 2>/dev/null || echo "")
 LOAD_AVG=$(cat "$NODE_DIR/load.txt" 2>/dev/null || echo "")
 
+# 读取系统信息
+SYSTEM_NAME=$(cat "$NODE_DIR/system_name.txt" 2>/dev/null || echo "未分类")
+NODE_ROLE=$(cat "$NODE_DIR/node_role.txt" 2>/dev/null || echo "unknown")
+
 echo "处理节点: $HOSTNAME ($IP)"
+echo "  所属系统: $SYSTEM_NAME"
+echo "  节点角色: $NODE_ROLE"
+
+# 插入或获取系统信息
+sqlite3 "$DB_FILE" <<EOF
+INSERT OR IGNORE INTO systems (system_name, system_type, environment)
+VALUES ('$SYSTEM_NAME', 'unknown', 'unknown');
+EOF
+
+SYSTEM_ID=$(sqlite3 "$DB_FILE" "SELECT id FROM systems WHERE system_name='$SYSTEM_NAME';")
+echo "  系统ID: $SYSTEM_ID"
 
 # 插入节点信息
 sqlite3 "$DB_FILE" <<EOF
-INSERT OR REPLACE INTO nodes (hostname, ip, os, kernel, uptime, cpu_info, memory_info, disk_info, load_avg)
-VALUES ('$HOSTNAME', '$IP', '$OS', '$KERNEL', '$UPTIME', 
+INSERT OR REPLACE INTO nodes (system_id, hostname, ip, os, kernel, uptime, cpu_info, memory_info, disk_info, load_avg, role)
+VALUES ($SYSTEM_ID, '$HOSTNAME', '$IP', '$OS', '$KERNEL', '$UPTIME', 
         '$(echo "$CPU_INFO" | sed "s/'/''/g")', 
         '$(echo "$MEMORY_INFO" | sed "s/'/''/g")', 
         '$(echo "$DISK_INFO" | sed "s/'/''/g")', 
-        '$(echo "$LOAD_AVG" | sed "s/'/''/g")');
+        '$(echo "$LOAD_AVG" | sed "s/'/''/g")',
+        '$NODE_ROLE');
 EOF
 
 NODE_ID=$(sqlite3 "$DB_FILE" "SELECT id FROM nodes WHERE hostname='$HOSTNAME' AND ip='$IP';")

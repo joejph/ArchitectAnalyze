@@ -1,9 +1,21 @@
 -- Linux集群架构分析数据库Schema
 -- 使用SQLite，轻量级，无需额外安装
 
+-- 系统信息表（多系统支持）
+CREATE TABLE IF NOT EXISTS systems (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    system_name TEXT NOT NULL UNIQUE,
+    description TEXT,
+    system_type TEXT,  -- web, api, database, cache, mq等
+    environment TEXT,  -- production, staging, development
+    owner TEXT,
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 -- 节点信息表
 CREATE TABLE IF NOT EXISTS nodes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    system_id INTEGER,  -- 关联到系统
     hostname TEXT NOT NULL,
     ip TEXT NOT NULL,
     os TEXT,
@@ -13,7 +25,9 @@ CREATE TABLE IF NOT EXISTS nodes (
     memory_info TEXT,
     disk_info TEXT,
     load_avg TEXT,
+    role TEXT,  -- 节点角色：web, api, db, cache等
     collect_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (system_id) REFERENCES systems(id) ON DELETE SET NULL,
     UNIQUE(hostname, ip)
 );
 
@@ -103,6 +117,33 @@ CREATE TABLE IF NOT EXISTS architecture_relations (
     description TEXT,
     FOREIGN KEY (source_node_id) REFERENCES nodes(id) ON DELETE CASCADE,
     FOREIGN KEY (target_node_id) REFERENCES nodes(id) ON DELETE CASCADE
+);
+
+-- 系统间关系表（多系统架构图）
+CREATE TABLE IF NOT EXISTS system_relations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_system_id INTEGER NOT NULL,
+    target_system_id INTEGER NOT NULL,
+    relation_type TEXT NOT NULL,  -- api_call, data_sync, message, dependency等
+    protocol TEXT,  -- HTTP, gRPC, TCP, MQ等
+    port INTEGER,
+    description TEXT,
+    direction TEXT DEFAULT 'unidirectional',  -- unidirectional, bidirectional
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (source_system_id) REFERENCES systems(id) ON DELETE CASCADE,
+    FOREIGN KEY (target_system_id) REFERENCES systems(id) ON DELETE CASCADE,
+    UNIQUE(source_system_id, target_system_id, relation_type)
+);
+
+-- 系统配置表
+CREATE TABLE IF NOT EXISTS system_configs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    system_id INTEGER NOT NULL,
+    config_key TEXT NOT NULL,
+    config_value TEXT,
+    description TEXT,
+    FOREIGN KEY (system_id) REFERENCES systems(id) ON DELETE CASCADE,
+    UNIQUE(system_id, config_key)
 );
 
 -- 创建索引
