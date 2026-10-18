@@ -20,29 +20,34 @@ export default function Header() {
           
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
             <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              Linux系统架构分析指南
+              Linux架构分析脚本生成器
             </span>
           </h1>
           
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8 leading-relaxed">
-            通过Linux命令行工具，逐步还原信息系统的运行架构。
-            <br className="hidden sm:block" />
-            从进程、网络、服务、端口等多个维度，全面掌握系统运行状态。
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-4 leading-relaxed">
+            一键生成可执行的Bash分析脚本，自动收集系统信息并生成HTML架构分析报告。
+          </p>
+          <p className="text-gray-500 max-w-2xl mx-auto mb-8">
+            选择需要的分析模块 → 生成脚本 → 上传到Linux服务器执行 → 获得完整架构报告
           </p>
 
           {/* Quick stats */}
           <div className="flex flex-wrap justify-center gap-6 mt-10">
             <div className="flex items-center gap-2 bg-gray-900/60 border border-gray-800 rounded-full px-5 py-2">
-              <i className="fas fa-list-check text-emerald-400"></i>
-              <span className="text-gray-300 text-sm">7大分析维度</span>
+              <i className="fas fa-cubes text-emerald-400"></i>
+              <span className="text-gray-300 text-sm">7大分析模块</span>
             </div>
             <div className="flex items-center gap-2 bg-gray-900/60 border border-gray-800 rounded-full px-5 py-2">
               <i className="fas fa-terminal text-cyan-400"></i>
-              <span className="text-gray-300 text-sm">50+实用命令</span>
+              <span className="text-gray-300 text-sm">40+采集命令</span>
             </div>
             <div className="flex items-center gap-2 bg-gray-900/60 border border-gray-800 rounded-full px-5 py-2">
-              <i className="fas fa-route text-purple-400"></i>
-              <span className="text-gray-300 text-sm">完整分析流程</span>
+              <i className="fas fa-file-code text-purple-400"></i>
+              <span className="text-gray-300 text-sm">HTML报告输出</span>
+            </div>
+            <div className="flex items-center gap-2 bg-gray-900/60 border border-gray-800 rounded-full px-5 py-2">
+              <i className="fas fa-download text-orange-400"></i>
+              <span className="text-gray-300 text-sm">一键下载执行</span>
             </div>
           </div>
         </div>
