@@ -156,46 +156,183 @@ export default function App() {
           </section>
         )}
 
-        {/* Usage Instructions */}
+        {/* Usage Instructions - Detailed Guide */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-center mb-8">
             <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-              使用方法
+              完整运行指南
             </span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-              <div className="w-12 h-12 bg-emerald-900/50 rounded-xl flex items-center justify-center mb-4">
-                <span className="text-emerald-400 font-bold text-xl">1</span>
+
+          {/* Quick Start */}
+          <div className="bg-gradient-to-r from-emerald-900/20 to-cyan-900/20 border border-emerald-800/50 rounded-xl p-6 mb-8">
+            <h3 className="text-lg font-semibold text-emerald-400 mb-3">
+              <i className="fas fa-rocket mr-2"></i>快速开始（3步完成）
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-gray-900/50 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-emerald-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                  <span className="text-gray-200 font-medium">下载脚本</span>
+                </div>
+                <p className="text-gray-400 text-xs">点击上方"下载 .sh 文件"按钮</p>
               </div>
-              <h3 className="text-lg font-semibold text-gray-200 mb-2">下载脚本</h3>
-              <p className="text-gray-400 text-sm">
-                点击上方"下载 .sh 文件"按钮，将脚本保存到本地。
-              </p>
-              <div className="mt-3 bg-gray-950 rounded-lg p-3 font-mono text-xs text-cyan-300">
-                或复制脚本内容
+              <div className="bg-gray-900/50 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-cyan-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                  <span className="text-gray-200 font-medium">上传到服务器</span>
+                </div>
+                <p className="text-gray-400 text-xs">使用SCP或FTP上传到Linux服务器</p>
+              </div>
+              <div className="bg-gray-900/50 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                  <span className="text-gray-200 font-medium">执行脚本</span>
+                </div>
+                <p className="text-gray-400 text-xs">赋予权限并运行，生成HTML报告</p>
               </div>
             </div>
+          </div>
+
+          {/* Detailed Methods */}
+          <div className="space-y-6">
+            {/* Method 1: SCP Upload */}
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-              <div className="w-12 h-12 bg-cyan-900/50 rounded-xl flex items-center justify-center mb-4">
-                <span className="text-cyan-400 font-bold text-xl">2</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-200 mb-2">上传到服务器</h3>
-              <p className="text-gray-400 text-sm">通过SCP或其他方式将脚本上传到目标Linux服务器。</p>
-              <div className="mt-3 bg-gray-950 rounded-lg p-3 font-mono text-xs text-cyan-300">
-                scp analyze_architecture.sh user@server:/tmp/
+              <h3 className="text-lg font-semibold text-gray-200 mb-4">
+                <i className="fas fa-upload text-emerald-400 mr-2"></i>
+                方式一：SCP上传（推荐）
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-gray-400 text-sm mb-2">在你的本地电脑上执行：</p>
+                  <div className="bg-gray-950 rounded-lg p-4 font-mono text-sm">
+                    <div className="text-gray-500 mb-1"># 1. 上传脚本到服务器</div>
+                    <div className="text-cyan-300">scp analyze_architecture.sh user@your-server:/tmp/</div>
+                    <div className="text-gray-500 mt-3 mb-1"># 2. SSH登录到服务器</div>
+                    <div className="text-cyan-300">ssh user@your-server</div>
+                    <div className="text-gray-500 mt-3 mb-1"># 3. 赋予执行权限</div>
+                    <div className="text-cyan-300">chmod +x /tmp/analyze_architecture.sh</div>
+                    <div className="text-gray-500 mt-3 mb-1"># 4. 运行脚本（建议用sudo获取完整信息）</div>
+                    <div className="text-cyan-300">sudo /tmp/analyze_architecture.sh</div>
+                  </div>
+                </div>
               </div>
             </div>
+
+            {/* Method 2: Copy Paste */}
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-              <div className="w-12 h-12 bg-purple-900/50 rounded-xl flex items-center justify-center mb-4">
-                <span className="text-purple-400 font-bold text-xl">3</span>
+              <h3 className="text-lg font-semibold text-gray-200 mb-4">
+                <i className="fas fa-copy text-cyan-400 mr-2"></i>
+                方式二：复制粘贴（无需上传文件）
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-gray-400 text-sm mb-2">直接在服务器上创建并执行：</p>
+                  <div className="bg-gray-950 rounded-lg p-4 font-mono text-sm">
+                    <div className="text-gray-500 mb-1"># 1. SSH登录到服务器</div>
+                    <div className="text-cyan-300">ssh user@your-server</div>
+                    <div className="text-gray-500 mt-3 mb-1"># 2. 创建脚本文件</div>
+                    <div className="text-cyan-300">nano /tmp/analyze_architecture.sh</div>
+                    <div className="text-gray-500 mt-3 mb-1"># 3. 粘贴脚本内容（从网页复制），保存退出</div>
+                    <div className="text-gray-500 mt-3 mb-1"># 4. 赋予执行权限并运行</div>
+                    <div className="text-cyan-300">chmod +x /tmp/analyze_architecture.sh</div>
+                    <div className="text-cyan-300">sudo /tmp/analyze_architecture.sh</div>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-lg font-semibold text-gray-200 mb-2">执行分析</h3>
-              <p className="text-gray-400 text-sm">赋予执行权限并运行脚本，生成分析报告。</p>
-              <div className="mt-3 bg-gray-950 rounded-lg p-3 font-mono text-xs text-cyan-300">
-                chmod +x analyze_architecture.sh
-                <br />
-                sudo ./analyze_architecture.sh
+            </div>
+
+            {/* Method 3: Direct Command */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-gray-200 mb-4">
+                <i className="fas fa-terminal text-purple-400 mr-2"></i>
+                方式三：一行命令（高级用户）
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-gray-400 text-sm mb-2">直接在服务器上执行（需要curl或wget）：</p>
+                  <div className="bg-gray-950 rounded-lg p-4 font-mono text-sm">
+                    <div className="text-gray-500 mb-1"># 使用curl下载并执行（不推荐，仅用于测试）</div>
+                    <div className="text-cyan-300">curl -s URL_TO_SCRIPT | sudo bash</div>
+                    <div className="text-gray-500 mt-3 mb-1"># 或使用wget</div>
+                    <div className="text-cyan-300">wget -qO- URL_TO_SCRIPT | sudo bash</div>
+                    <div className="text-yellow-400 mt-3 text-xs">⚠️ 注意：这种方式需要脚本托管在可访问的URL上</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Expected Output */}
+          <div className="mt-8 bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-gray-200 mb-4">
+              <i className="fas fa-check-circle text-emerald-400 mr-2"></i>
+              预期输出
+            </h3>
+            <div className="bg-gray-950 rounded-lg p-4 font-mono text-sm mb-4">
+              <div className="text-gray-500"># 脚本运行时会显示：</div>
+              <div className="text-blue-400">========================================</div>
+              <div className="text-green-400">  Linux系统架构自动分析工具</div>
+              <div className="text-blue-400">========================================</div>
+              <div className="text-cyan-400">报告将保存到: ./architecture_report_20240101_120000</div>
+              <div className="text-gray-500 mt-2"># 然后逐项分析...</div>
+              <div className="text-yellow-400">[分析] 系统基本信息...</div>
+              <div className="text-green-400">  ✓ 完成</div>
+              <div className="text-yellow-400">[分析] 运行中的服务列表...</div>
+              <div className="text-green-400">  ✓ 完成</div>
+              <div className="text-gray-500">...</div>
+              <div className="text-blue-400 mt-2">========================================</div>
+              <div className="text-green-400">  ✅ 分析完成！</div>
+              <div className="text-blue-400">========================================</div>
+              <div className="text-cyan-400">报告目录: ./architecture_report_20240101_120000</div>
+              <div className="text-cyan-400">HTML报告: ./architecture_report_20240101_120000/report.html</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gray-950/50 rounded-lg p-4">
+                <p className="text-emerald-400 font-medium mb-2">
+                  <i className="fas fa-folder-open mr-2"></i>生成的文件
+                </p>
+                <ul className="text-gray-400 text-sm space-y-1">
+                  <li>• <code className="text-cyan-300">report.html</code> - 可视化HTML报告</li>
+                  <li>• <code className="text-cyan-300">raw_data/</code> - 原始数据目录</li>
+                  <li>• <code className="text-cyan-300">all_output.txt</code> - 所有输出汇总</li>
+                </ul>
+              </div>
+              <div className="bg-gray-950/50 rounded-lg p-4">
+                <p className="text-cyan-400 font-medium mb-2">
+                  <i className="fas fa-eye mr-2"></i>查看报告
+                </p>
+                <ul className="text-gray-400 text-sm space-y-1">
+                  <li>• 将 <code className="text-cyan-300">report.html</code> 下载到本地</li>
+                  <li>• 用浏览器打开查看完整分析结果</li>
+                  <li>• 或直接在服务器上用 <code className="text-cyan-300">cat</code> 查看原始数据</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* FAQ */}
+          <div className="mt-8 bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-gray-200 mb-4">
+              <i className="fas fa-question-circle text-yellow-400 mr-2"></i>
+              常见问题
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <p className="text-emerald-400 font-medium mb-1">Q: 需要用root用户运行吗？</p>
+                <p className="text-gray-400 text-sm">A: 建议使用sudo运行，这样可以获取更完整的信息（如所有进程、完整网络信息等）。普通用户也能运行，但部分信息可能受限。</p>
+              </div>
+              <div>
+                <p className="text-emerald-400 font-medium mb-1">Q: 脚本会修改系统吗？</p>
+                <p className="text-gray-400 text-sm">A: 不会。脚本只读取系统信息，不做任何修改。所有输出都保存在当前目录下的报告文件夹中。</p>
+              </div>
+              <div>
+                <p className="text-emerald-400 font-medium mb-1">Q: 支持哪些Linux发行版？</p>
+                <p className="text-gray-400 text-sm">A: 支持所有主流Linux发行版：CentOS、RHEL、Ubuntu、Debian、Fedora、Arch等。脚本会自动检测系统类型。</p>
+              </div>
+              <div>
+                <p className="text-emerald-400 font-medium mb-1">Q: 如何查看生成的报告？</p>
+                <p className="text-gray-400 text-sm">A: 将 <code className="text-cyan-300">report.html</code> 文件下载到本地，用浏览器打开即可。或者用 <code className="text-cyan-300">cat raw_data/*.txt</code> 查看原始数据。</p>
               </div>
             </div>
           </div>
