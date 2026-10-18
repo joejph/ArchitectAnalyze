@@ -106,10 +106,14 @@ EOF
     done
 fi
 
-# 解析进程信息
+# 解析进程信息（已过滤系统进程）
 if [ -f "$NODE_DIR/processes.txt" ]; then
-    echo "  写入进程信息..."
-    tail -n +2 "$NODE_DIR/processes.txt" | head -50 | while read -r line; do
+    echo "  写入业务进程信息（已过滤系统进程）..."
+    # 跳过标题行，过滤空行
+    tail -n +2 "$NODE_DIR/processes.txt" | grep -v '^$' | head -50 | while read -r line; do
+        # 跳过非进程行
+        echo "$line" | grep -q '^[a-zA-Z]' || continue
+        
         USER=$(echo "$line" | awk '{print $1}')
         PID=$(echo "$line" | awk '{print $2}')
         CPU=$(echo "$line" | awk '{print $3}')
@@ -118,10 +122,13 @@ if [ -f "$NODE_DIR/processes.txt" ]; then
         RSS=$(echo "$line" | awk '{print $6}')
         CMD=$(echo "$line" | awk '{for(i=11;i<=NF;i++) printf "%s ", $i; print ""}')
         
-        sqlite3 "$DB_FILE" <<EOF
+        # 验证PID是数字
+        if [[ "$PID" =~ ^[0-9]+$ ]]; then
+            sqlite3 "$DB_FILE" <<EOF
 INSERT INTO processes (node_id, pid, user, cpu_percent, mem_percent, vsz, rss, command)
 VALUES ($NODE_ID, $PID, '$USER', $CPU, $MEM, $VSZ, $RSS, '$(echo "$CMD" | sed "s/'/''/g")');
 EOF
+        fi
     done
 fi
 

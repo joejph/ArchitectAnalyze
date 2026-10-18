@@ -1,0 +1,73 @@
+# 系统默认进程黑名单
+# 每行一个进程名或关键字，采集时会自动过滤
+# 支持正则表达式
+# 以 # 开头的行为注释
+
+# === 内核线程 ===
+\[.*\]
+
+# === 系统初始化 ===
+systemd
+init
+systemd-journal
+systemd-logind
+systemd-udevd
+systemd-resolved
+systemd-timesyncd
+systemd-networkd
+
+# === 系统守护进程 ===
+sshd
+cron
+crond
+rsyslog
+syslog
+dbus-daemon
+dbus
+NetworkManager
+dhclient
+polkitd
+accounts-daemon
+udisksd
+thermald
+irqbalance
+atd
+agetty
+login
+
+# === 硬件相关 ===
+udev
+kworker
+ksoftirqd
+migration
+watchdog
+kdevtmpfs
+rcu_
+kthread
+
+# === 日志和监控 ===
+auditd
+firewalld
+tuned
+chronyd
+ntpd
+
+# === 容器运行时（可选，如果只关注业务容器可保留） ===
+# containerd
+# dockerd
+
+# === 其他系统进程 ===
+bash
+sh
+sleep
+grep
+awk
+sed
+cat
+ps
+top
+htop
+sudo
+su
+screen
+tmux

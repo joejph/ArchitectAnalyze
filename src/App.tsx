@@ -201,7 +201,8 @@ function ClusterMode({ copied, onCopy }: { copied: string; onCopy: (text: string
               </div>
             </div>
             <p className="text-gray-400 text-sm mb-4">
-              采集本机的服务、端口、进程、容器、网络等信息，保存到本地目录。
+              采集本机的服务、端口、进程、容器、网络等信息，保存到本地目录。<br/>
+              <span className="text-emerald-400">✓ 自动过滤系统默认进程和服务</span>
             </p>
             <a
               href="./node_collect.sh"
@@ -578,6 +579,53 @@ function DatabaseMode() {
         </div>
       </section>
 
+      {/* Process Filter Info */}
+      <section className="mb-12">
+        <div className="bg-gradient-to-r from-emerald-900/20 to-green-900/20 border border-emerald-800/50 rounded-xl p-6">
+          <h3 className="text-xl font-bold text-emerald-400 mb-3">
+            <i className="fas fa-filter mr-2"></i>智能进程过滤
+          </h3>
+          <p className="text-gray-400 mb-4">
+            采集脚本会自动过滤操作系统默认进程，只保留业务相关进程，让架构分析更清晰。
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h4 className="text-gray-300 font-semibold mb-2">
+                <i className="fas fa-times-circle text-red-400 mr-2"></i>自动过滤的系统进程
+              </h4>
+              <div className="bg-gray-900/50 rounded-lg p-3 text-sm text-gray-400 space-y-1">
+                <div>• 内核线程 <code className="text-gray-500">[kworker], [ksoftirqd]</code></div>
+                <div>• 系统初始化 <code className="text-gray-500">systemd, init</code></div>
+                <div>• 系统守护进程 <code className="text-gray-500">sshd, cron, rsyslog</code></div>
+                <div>• 硬件管理 <code className="text-gray-500">udev, thermald</code></div>
+                <div>• 网络管理 <code className="text-gray-500">NetworkManager, dhclient</code></div>
+                <div>• 日志监控 <code className="text-gray-500">auditd, firewalld</code></div>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-gray-300 font-semibold mb-2">
+                <i className="fas fa-check-circle text-emerald-400 mr-2"></i>保留的业务进程
+              </h4>
+              <div className="bg-gray-900/50 rounded-lg p-3 text-sm text-gray-400 space-y-1">
+                <div>• Java应用 <code className="text-emerald-400">java, tomcat, spring</code></div>
+                <div>• Node.js应用 <code className="text-emerald-400">node, npm</code></div>
+                <div>• Python应用 <code className="text-emerald-400">python, gunicorn, uwsgi</code></div>
+                <div>• Web服务器 <code className="text-emerald-400">nginx, apache, httpd</code></div>
+                <div>• 数据库 <code className="text-emerald-400">mysql, postgres, redis</code></div>
+                <div>• 消息队列 <code className="text-emerald-400">rabbitmq, kafka</code></div>
+                <div>• 容器应用 <code className="text-emerald-400">docker容器内进程</code></div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 bg-gray-900/50 rounded-lg p-3">
+            <p className="text-sm text-gray-400">
+              <i className="fas fa-info-circle text-cyan-400 mr-2"></i>
+              黑名单文件 <code className="text-cyan-300">system_process_blacklist.txt</code> 可自定义编辑，添加或移除过滤规则
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Download Scripts */}
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-center mb-8">
@@ -585,7 +633,25 @@ function DatabaseMode() {
             下载数据库相关脚本
           </span>
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-emerald-900/50 rounded-lg flex items-center justify-center">
+                <i className="fas fa-filter text-emerald-400"></i>
+              </div>
+              <h3 className="font-semibold text-gray-200">进程黑名单</h3>
+            </div>
+            <p className="text-gray-400 text-sm mb-4">系统进程过滤规则（可自定义）</p>
+            <a
+              href="./system_process_blacklist.txt"
+              download
+              className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors text-sm"
+            >
+              <i className="fas fa-download"></i>
+              <span>下载黑名单</span>
+            </a>
+          </div>
+
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-cyan-900/50 rounded-lg flex items-center justify-center">
@@ -603,7 +669,6 @@ function DatabaseMode() {
               <span>下载 schema.sql</span>
             </a>
           </div>
-
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-emerald-900/50 rounded-lg flex items-center justify-center">
