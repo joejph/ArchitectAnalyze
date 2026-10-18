@@ -115,37 +115,43 @@ export default function App() {
 
         {/* Action Buttons */}
         <section className="mb-12">
-          <div className="flex flex-wrap gap-4 justify-center">
-            <button
-              onClick={handleCopy}
-              className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/30 transition-all duration-200 hover:scale-105"
-            >
-              {copied ? (
-                <>
-                  <i className="fas fa-check"></i>
-                  <span>已复制到剪贴板!</span>
-                </>
-              ) : (
-                <>
-                  <i className="fas fa-copy"></i>
-                  <span>复制脚本</span>
-                </>
-              )}
-            </button>
-            <button
-              onClick={handleDownload}
-              className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-xl shadow-lg shadow-purple-600/30 transition-all duration-200 hover:scale-105"
-            >
-              <i className="fas fa-download"></i>
-              <span>下载 .sh 文件</span>
-            </button>
-            <button
-              onClick={() => setShowPreview(!showPreview)}
-              className="flex items-center gap-3 px-8 py-4 bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold rounded-xl border border-gray-700 transition-all duration-200"
-            >
-              <i className="fas fa-eye"></i>
-              <span>{showPreview ? '隐藏预览' : '预览脚本'}</span>
-            </button>
+          <div className="bg-gradient-to-r from-emerald-900/20 to-cyan-900/20 border border-emerald-800/50 rounded-xl p-6 mb-6">
+            <p className="text-center text-gray-300 mb-4">
+              <i className="fas fa-info-circle text-emerald-400 mr-2"></i>
+              脚本会根据你选择的模块动态生成，点击下方按钮即可获取
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <button
+                onClick={handleDownload}
+                className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-xl shadow-lg shadow-purple-600/30 transition-all duration-200 hover:scale-105"
+              >
+                <i className="fas fa-download"></i>
+                <span>下载 analyze_architecture.sh</span>
+              </button>
+              <button
+                onClick={handleCopy}
+                className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/30 transition-all duration-200 hover:scale-105"
+              >
+                {copied ? (
+                  <>
+                    <i className="fas fa-check"></i>
+                    <span>已复制到剪贴板!</span>
+                  </>
+                ) : (
+                  <>
+                    <i className="fas fa-copy"></i>
+                    <span>复制脚本内容</span>
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => setShowPreview(!showPreview)}
+                className="flex items-center gap-3 px-8 py-4 bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold rounded-xl border border-gray-700 transition-all duration-200"
+              >
+                <i className="fas fa-eye"></i>
+                <span>{showPreview ? '隐藏预览' : '预览脚本'}</span>
+              </button>
+            </div>
           </div>
         </section>
 
